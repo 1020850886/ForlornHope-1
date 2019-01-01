@@ -17,14 +17,29 @@ public class friend : MonoBehaviour {
 	}
     void select(GameObject selected)
     {
-    
+        for (int i = 0; i < transform.childCount; i++) 
+        {
+            transform.GetChild(i).GetComponent<test>().isSelect = false;
+            transform.GetChild(i).GetComponent<SpriteRenderer>().color = new Color(255, 255, 255);
+        }
+        this.selected = selected;
     }
     void attack(GameObject target)
     {
-
+        if (selected == null) return;
+        if ((target.transform.position - selected.transform.position).magnitude > selected.GetComponent<test>().range) return;
+        if (selected.GetComponent<test>().isAttack == true) return;
+        selected.GetComponent<test>().isAttack = true;
+        target.GetComponent<test>().damage(selected.GetComponent<test>().attack);
     }
     public void next()
     {
-
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).GetComponent<test>().isSelect = false;
+            transform.GetChild(i).GetComponent<test>().isAttack = false;
+            transform.GetChild(i).GetComponent<test>().move = 0;
+            transform.GetChild(i).GetComponent<test>().refresh();
+        }
     }
 }
